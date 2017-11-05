@@ -101,7 +101,70 @@ This allows us to query old versions, but we can't change them.
 
 ### Partial Persistence
 
-UPTO: https://www.youtube.com/watch?v=T0yzrZL1py0 19:14
+Any pointer machine data structure with a constant number of pointers
+into any node ( <= O(1) / constant indegree). In a pointer machine you
+always have a constant number of pointers out of a node, but for
+partial persistence we have this additoinal constraint.
+
+Any data structure in this world ^ can be made partially persistent
+with:
+  O(1) amortized factor overhead
++ O(1) space / change
+
+#### Proof
+
+P is the bound on the indegree of a node.
+
+1. Store back pointers (for latest version of DS)
+This is why we need the constant indegree constraint. So whenever we
+store a pointer to a node, we want that node to have a back pointer so
+that we know where all the pointers came from. We need P back pointers
+(so still constant).
+
+2. Store modifications to fields of DS
+Mods are (version, field, value). So we don't actually change the
+fields and their values, we leave them and store mods on the node.
+We need 2P mods stored on a node (constant).
+
+So does this give us constant amortized overhead?
+
+Reading a field:
+Given some version v, what is the value at a given field?
+* Constant time to look through mods with version <= v, did this field
+change? Look at the latest one. So constant time.
+
+Changing a field:
+To set node.field = x:
+* If node is not full (space left in mods space), add mod (now, field, x)
+
+* If node is full, we need to make a new node, node' with all mods
+  including our new mod *applied* (and back pointers intact). The mods
+  will be empty on node'. What about the outdated pointers and back
+  pointers. Conveniently, the back pointers are easy:
+   * Update back pointers to node to node'
+   * Update pointers recursively
+
+
+Analysing this algorithm using the potential method:
+This is using the CLRS notion of amortized cost which is actual cost +
+change in potential.
+
+c * sum #mods in latest version
+=> amortized cost <= c (time) + c (+1 mod) + [-2cp + p * recursion]?
+= O(1)
+
+
+### Full Persistence
+
+Versions are no longer numbers, they're nodes in a tree. This is
+annoying because trees are harder than lines. So, we linearize the
+tree of versions with tree traversal. When doing so, we want to
+maintain the begin & end of each subtree of versions.
+
+UPTO: 44:37
+
+
+
 
 
 # Notes from Purely Functional Data Structures
