@@ -197,6 +197,33 @@ worst-case.
 So we need a language that supports both!
 
 
+## Persistence
+
+A distinctive property of functional data structures is that they're
+always persistent.
+
+
+### Lists
+
+The core functions supported by lists are essentially those of the
+stack abstraction: https://www.safaribooksonline.com/library/view/purely-functional-data/9780521631242/images/P008.jpg
+
+```
+type Stack a
+
+val empty   : Stack a
+val isEmpty : Stack a -> Bool
+val cons    : a -> Stack a -> Stack a
+val head    : Stack a -> a
+val tail    : Stack a -> Stack a
+```
+
+Another common function we might consider adding to this signature is
+`++` which catenates (i.e., appends) two lists. In an imperative
+setting, this function can be easily supported in O(1) time by
+maintaining pointers to both the first & last cell in each list. `++`
+then simply modifies the last cell of the first list to point to the
+first cell of the second list.
 
 
 # Resources
