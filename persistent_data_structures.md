@@ -101,7 +101,7 @@ This allows us to query old versions, but we can't change them.
 
 ### Partial Persistence
 
-
+UPTO: https://www.youtube.com/watch?v=T0yzrZL1py0 19:14
 
 
 # Notes from Purely Functional Data Structures
